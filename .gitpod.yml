@@ -1,0 +1,27 @@
+tasks:
+  - name: db
+    init: docker-compose up -d
+  - name: npm i backend
+    before: cd cozero-backend
+    init: |
+      npm i
+      gp sync-done npmbackend
+  - name: npm i frontend
+    before: cd cozero-frontend
+    init: |
+      npm i
+      gp sync-done npmfrontend
+  - name: run backend
+    before: cd cozero-backend
+    init: |
+      gp sync-await npmbackend
+      npm run dev
+  - name: run frontend
+    before: cd cozero-frontend
+    init: |
+      gp sync-await npmfrontend
+      npm run dev
+
+github:
+  prebuilds:
+    branches: true
