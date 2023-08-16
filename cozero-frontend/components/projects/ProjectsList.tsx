@@ -1,4 +1,4 @@
-import { Flex, Stack, Text, useToast } from '@chakra-ui/react';
+import { Flex, Input, Stack, Text, useToast } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Project } from '../../interfaces/project.interface';
@@ -7,19 +7,24 @@ import { translate } from '../../utils/language.utils';
 import ProjectItem from './ProjectItem';
 import { ProjectsEmptyState } from './ProjectsEmptyState';
 
+import { useDebounce } from '../../hooks/useDebounce';
+
 export default function ProjectsList() {
   const [projectList, setProjectList] = useState<Project[]>([]);
+  const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const toast = useToast();
 
+  const searchQuery = useDebounce(query);
+
   const fetchProjects = useCallback(async () => {
-    const projects = await ProjectsService.fetchProjects();
+    const projects = await ProjectsService.fetchProjects(searchQuery);
     if (projects && projects?.length !== 0) {
       setProjectList(projects);
     }
     setIsLoading(false);
-  }, []);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetchProjects();
@@ -53,6 +58,13 @@ export default function ProjectsList() {
 
   return (
     <Stack spacing={8}>
+      <Input
+        type='text'
+        placeholder='Search for projects...'
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+
       {projectList?.map((project) => (
         <ProjectItem key={project.id} project={project} onDelete={onDelete} />
       ))}
