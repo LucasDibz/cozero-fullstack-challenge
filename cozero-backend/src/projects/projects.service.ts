@@ -41,7 +41,11 @@ export class ProjectsService {
     return this.projectsRepository.update({ id }, updateProjectDto);
   }
 
+  async restore(id: number) {
+    return this.projectsRepository.restore(id);
+  }
+
   async remove(id: number) {
-    return this.projectsRepository.delete(id);
+    return this.projectsRepository.softDelete(id);
   }
 }

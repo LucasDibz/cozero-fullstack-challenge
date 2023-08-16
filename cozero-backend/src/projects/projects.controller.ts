@@ -45,6 +45,11 @@ export class ProjectsController {
     return this.projectsService.update(+id, updateProjectDto);
   }
 
+  @Put(':id/restore')
+  restore(@Param('id') id: string) {
+    return this.projectsService.restore(+id);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.projectsService.remove(+id);
