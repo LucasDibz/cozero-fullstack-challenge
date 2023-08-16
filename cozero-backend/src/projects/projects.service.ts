@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
@@ -18,6 +18,19 @@ export class ProjectsService {
 
   async findAll(): Promise<Project[]> {
     return this.projectsRepository.find();
+  }
+
+  async findAllWithText(text: string): Promise<Project[]> {
+    return this.projectsRepository.find({
+      where: [
+        {
+          name: Like(`%${text}%`),
+        },
+        {
+          description: Like(`%${text}%`),
+        },
+      ],
+    });
   }
 
   async findOne(id: number) {

@@ -1,16 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { ProjectsService } from './projects.service';
+import { SkipAuth } from 'src/decorators/skipAuth.decorator';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { SkipAuth } from 'src/decorators/skipAuth.decorator';
+import { ProjectsService } from './projects.service';
 
 @Controller('projects')
 export class ProjectsController {
@@ -23,7 +24,13 @@ export class ProjectsController {
 
   @SkipAuth()
   @Get()
-  findAll() {
+  findAll(@Query() query) {
+    const { text } = query;
+
+    if (text) {
+      return this.projectsService.findAllWithText(text);
+    }
+
     return this.projectsService.findAll();
   }
 
