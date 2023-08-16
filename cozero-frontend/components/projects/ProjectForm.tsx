@@ -45,10 +45,18 @@ export default function ProjectForm() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const toast = useToast();
   const navigate = useNavigate();
-  const { register, handleSubmit, watch, control, setValue, reset } =
-    useForm<IProjectForm>({
-      defaultValues: createProjectDefaultValues,
-    });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    setValue,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm<IProjectForm>({
+    defaultValues: createProjectDefaultValues,
+  });
   const { context } = useContext(AuthContext);
 
   const { append, remove } = useFieldArray({
@@ -99,14 +107,23 @@ export default function ProjectForm() {
   };
 
   const onSubmitForm = async (projectForm: IProjectForm) => {
-    setIsProcessing(true);
-
     const project: CreateProjectDto | UpdateProjectDto =
       projectFormToProjectDTO(projectForm, context?.user?.email as string);
+
+    if (!project.listing.length) {
+      setError('listing', {
+        type: 'required',
+        message: 'Please define at least one listing',
+      });
+      return;
+    }
+
+    setIsProcessing(true);
 
     const projectResponse = id
       ? await ProjectsService.updateProject(project as UpdateProjectDto)
       : await ProjectsService.createProject(project as CreateProjectDto);
+
     setIsProcessing(false);
 
     const { title, description } = getProjectResponseTranslation(
@@ -201,6 +218,11 @@ export default function ProjectForm() {
             onChange={(e) => setListItem(e.target.value)}
             onKeyDown={onKeyDown}
           />
+          {errors.listing && (
+            <Text fontSize='sm' color='red' fontStyle='italic'>
+              {errors.listing.message}
+            </Text>
+          )}
           <FormHelperText>{translate('ADD_PROPOSAL_ENTER')}</FormHelperText>
         </FormControl>
         <List spacing={3} id='listing-proposals'>
