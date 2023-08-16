@@ -19,11 +19,11 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forRoot({
       // autoLoadEntities: true,
       entities: [Project, User],
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
+      type: 'sqlite',
+      // host: process.env.DB_HOST,
+      // port: parseInt(process.env.DB_PORT),
+      // username: process.env.DB_USERNAME,
+      // password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       synchronize: true, // Just for the CoZero MVP. Must be false in production and use migrations.
     }),
