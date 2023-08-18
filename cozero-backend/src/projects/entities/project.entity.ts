@@ -1,3 +1,4 @@
+import { ArrayNotEmpty } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -27,6 +28,7 @@ export class Project {
   @Column()
   owner: string;
 
+  @ArrayNotEmpty()
   @Column('simple-array')
   listing: string[];
 
