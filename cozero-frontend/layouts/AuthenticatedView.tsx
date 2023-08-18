@@ -1,30 +1,22 @@
-import { useEffect } from "react"
+import { Navigate } from 'react-router';
+import { useAuth } from '../hooks/useAuth';
 
 interface Props {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function AuthenticatedView({ children }: Props) {
-    const isUser = true
+  const { user } = useAuth();
 
-    
-    useEffect(() => {
-      if (status === "loading") {
-        return
-      }
-
-      if (!isUser) {
-        return
-      }
-
-    }, [])
-  
-    if (isUser) {
-      return <>{children}</>
-    }
-  
-    // Session is being fetched, or no user.
-    // If no user, useEffect() will redirect.
-    return <div>Loading...</div>
+  if (!user) {
+    return (
+      <Navigate to={'/sign-in'} state={{ from: location.pathname }} replace />
+    );
   }
-    
+
+  if (user) {
+    return <>{children}</>;
+  }
+
+  return <div>Loading...</div>;
+}
