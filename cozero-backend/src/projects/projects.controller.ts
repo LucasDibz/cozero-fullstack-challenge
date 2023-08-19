@@ -24,11 +24,11 @@ export class ProjectsController {
 
   @SkipAuth()
   @Get()
-  findAll(@Query() query) {
-    const { text } = query;
+  findAll(@Query() query?: { search: string }) {
+    const search = query?.search;
 
-    if (text) {
-      return this.projectsService.findAllWithText(text);
+    if (search) {
+      return this.projectsService.findAllWithText(search);
     }
 
     return this.projectsService.findAll();

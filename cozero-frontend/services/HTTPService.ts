@@ -11,7 +11,7 @@ class HTTPService {
     let url = `${BACKEND_URL}/${path}`;
 
     if (query) {
-      url += `?${new URLSearchParams({ text: query }).toString()}`;
+      url += `?${new URLSearchParams({ search: query }).toString()}`;
     }
 
     try {
