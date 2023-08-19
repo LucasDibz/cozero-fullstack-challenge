@@ -113,7 +113,7 @@ export default function ProjectForm() {
     if (!project.listing.length) {
       setError('listing', {
         type: 'required',
-        message: 'Please define at least one listing',
+        message: translate('REQUIRED_LISTING'),
       });
       return;
     }

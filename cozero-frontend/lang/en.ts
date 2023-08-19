@@ -53,4 +53,5 @@ export enum LanguageEN {
     NO_PROJECTS_DESCRIPTION='Create your first project now!',
     DONT_HAVE_AN_ACCOUNT='Don\'t have an account?',
     SIGN_UP='Sign up',
+    REQUIRED_LISTING='Please define at least one listing'
 }
