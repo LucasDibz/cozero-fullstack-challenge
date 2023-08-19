@@ -1,4 +1,12 @@
-import { Flex, Input, Stack, Text, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Project } from '../../interfaces/project.interface';
@@ -7,6 +15,7 @@ import { translate } from '../../utils/language.utils';
 import ProjectItem from './ProjectItem';
 import { ProjectsEmptyState } from './ProjectsEmptyState';
 
+import { AiOutlineSearch } from 'react-icons/ai';
 import { useDebounce } from '../../hooks/useDebounce';
 
 export default function ProjectsList() {
@@ -20,9 +29,8 @@ export default function ProjectsList() {
 
   const fetchProjects = useCallback(async () => {
     const projects = await ProjectsService.fetchProjects(searchQuery);
-    if (projects && projects?.length !== 0) {
-      setProjectList(projects);
-    }
+    setProjectList(projects ?? []);
+
     setIsLoading(false);
   }, [searchQuery]);
 
@@ -52,22 +60,28 @@ export default function ProjectsList() {
     }
   };
 
-  if (projectList.length === 0 && !isLoading) {
-    return <ProjectsEmptyState />;
-  }
-
   return (
     <Stack spacing={8}>
-      <Input
-        type='text'
-        placeholder='Search for projects...'
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
+      <InputGroup>
+        <Input
+          type='text'
+          placeholder='Search for projects...'
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <InputRightElement pointerEvents='none'>
+          <AiOutlineSearch color='#CBD5E0' />
+        </InputRightElement>
+      </InputGroup>
+
+      {projectList.length === 0 && !isLoading && (
+        <ProjectsEmptyState query={searchQuery} />
+      )}
 
       {projectList?.map((project) => (
         <ProjectItem key={project.id} project={project} onDelete={onDelete} />
       ))}
+
       <Flex gap={2} justifyContent='center'>
         <Text>{translate('PROJECTS_FOOTER_CTA')}</Text>
         <Text

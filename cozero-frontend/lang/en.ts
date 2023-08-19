@@ -50,6 +50,7 @@ export enum LanguageEN {
     EMISSIONS_LEARN='Learn how  CO2e is calculated.',
     CREATE_PROJECT='Create project',
     NO_PROJECTS_TITLE="You don't have any projects yet.",
+    NO_PROJECTS_FOUND_TITLE="No projects matching your search.",
     NO_PROJECTS_DESCRIPTION='Create your first project now!',
     DONT_HAVE_AN_ACCOUNT='Don\'t have an account?',
     SIGN_UP='Sign up',

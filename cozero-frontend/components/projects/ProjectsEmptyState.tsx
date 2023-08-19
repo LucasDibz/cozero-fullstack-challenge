@@ -3,8 +3,28 @@ import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { translate } from '../../utils/language.utils';
 
-export const ProjectsEmptyState = () => {
+type ProjectsEmptyStateProps = {
+  query?: string;
+};
+export const ProjectsEmptyState = ({ query }: ProjectsEmptyStateProps) => {
   const navigate = useNavigate();
+
+  if (query) {
+    return (
+      <Container
+        gap={5}
+        display={'flex'}
+        alignItems='center'
+        justifyContent={'center'}
+        flexDirection='column'
+      >
+        <TbMoodEmpty size={60} />
+        <Heading size='lg' textAlign='center'>
+          {translate('NO_PROJECTS_FOUND_TITLE')}
+        </Heading>
+      </Container>
+    );
+  }
 
   return (
     <Container
